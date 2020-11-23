@@ -28,12 +28,14 @@ export class BetterTables {
         
         
         //VaderDojo: Replaced Actor updates with Token updates.
+        ui.notifications.info("Loot generation started.");
         await lootCreator.addCurrenciesToTokens();
         await lootCreator.addItemsToTokens();
         
         //await lootCreator.createActor(tableEntity);
         //await lootCreator.addCurrenciesToActor();
         //await lootCreator.addItemsToActor();
+        ui.notifications.info("Loot generation complete.");
     }
 
     async generateChatLoot(tableEntity) {
