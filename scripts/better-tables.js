@@ -14,27 +14,28 @@ export class BetterTables {
         if (canvas.tokens.controlled.length === 0)
               return ui.notifications.error("Please select a token first");
         
-        
+        ui.notifications.info("Loot generation started.");       
         const brtBuilder = new BRTBuilder(tableEntity);
-        const results = await brtBuilder.betterRoll();
+	    for ( let token of canvas.tokens.controlled ) {
+        	const results = await brtBuilder.betterRoll();
 
-        const br = new BetterResults(results);
-        const betterResults = await br.buildResults(tableEntity);
-        const currencyData = br.getCurrencyData();
-        // console.log("++BETTER RESULTS ", betterResults);
-        // console.log("++ currencyData", currencyData);
+        	const br = new BetterResults(results);
+        	const betterResults = await br.buildResults(tableEntity);
+        	const currencyData = br.getCurrencyData();
+        	 console.log("++BETTER RESULTS ", betterResults);
+        	 console.log("++ currencyData", currencyData);
 
-        const lootCreator = new LootCreator(betterResults, currencyData);
+        	const lootCreator = new LootCreator(betterResults, currencyData);
         
+
+        	//VaderDojo: Replaced Actor updates with Token updates.
+        	await lootCreator.addCurrenciesToToken(token);
+        	await lootCreator.addItemsToToken(token);
         
-        //VaderDojo: Replaced Actor updates with Token updates.
-        ui.notifications.info("Loot generation started.");
-        await lootCreator.addCurrenciesToTokens();
-        await lootCreator.addItemsToTokens();
-        
-        //await lootCreator.createActor(tableEntity);
-        //await lootCreator.addCurrenciesToActor();
-        //await lootCreator.addItemsToActor();
+        	//await lootCreator.createActor(tableEntity);
+        	//await lootCreator.addCurrenciesToActor();
+        	//await lootCreator.addItemsToActor();
+	        }
         ui.notifications.info("Loot generation complete.");
     }
 
