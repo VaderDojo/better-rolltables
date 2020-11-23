@@ -7,6 +7,14 @@ import { BetterResults } from './core/brt-table-results.js';
 
 export class BetterTables {
     async generateLoot(tableEntity) {
+        
+        //VaderDojo: Only allow if tokens are selected 
+        //TODO:  This check could be enhanced to only function if a UI toggle to use
+        // token logic is enabled
+        if (canvas.tokens.controlled.length === 0)
+              return ui.notifications.error("Please select a token first");
+        
+        
         const brtBuilder = new BRTBuilder(tableEntity);
         const results = await brtBuilder.betterRoll();
 
@@ -17,9 +25,15 @@ export class BetterTables {
         // console.log("++ currencyData", currencyData);
 
         const lootCreator = new LootCreator(betterResults, currencyData);
-        await lootCreator.createActor(tableEntity);
-        await lootCreator.addCurrenciesToActor();
-        await lootCreator.addItemsToActor();
+        
+        
+        //VaderDojo: Replaced Actor updates with Token updates.
+        await lootCreator.addCurrenciesToTokens();
+        await lootCreator.addItemsToTokens();
+        
+        //await lootCreator.createActor(tableEntity);
+        //await lootCreator.addCurrenciesToActor();
+        //await lootCreator.addItemsToActor();
     }
 
     async generateChatLoot(tableEntity) {
