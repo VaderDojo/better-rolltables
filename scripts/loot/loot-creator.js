@@ -55,7 +55,7 @@ export class LootCreator {
     /**
     Token methods added VaderDoJo
     */
-    async addCurrenciesToTokens() {
+   async addCurrenciesToToken(token) {
 
 	//needed for base key set in the event that a token has no currency properties
 	let currencyDataInitial = {
@@ -68,8 +68,9 @@ export class LootCreator {
 
 
 
-	for ( let token of canvas.tokens.controlled ) {
-		console.log(token.data.actorData.data.currency);
+	
+		//console.log(token);
+		//console.log(token.data.actorData.data.currency);
 		let currencyData = undefined;
 		if (token.data.actorData.data.currency == undefined) {
 			currencyData = currencyDataInitial;
@@ -78,28 +79,28 @@ export class LootCreator {
 			//console.log(currencyData);
 		} else { 			
 			//console.log(token.data.actorData.data.currency.toString())
-	        currencyData = duplicate(token.data.actorData.data.currency);
+	        	currencyData = duplicate(token.data.actorData.data.currency);
 		}
 		
-        const lootCurrency = this.currencyData;
+        	const lootCurrency = this.currencyData;
 		
 		for (var key in currencyDataInitial) {
-              const amount = Number(currencyData[key].value || 0) + Number(lootCurrency[key] || 0);
-              currencyData[key] = { "value": amount.toString() };
+              	const amount = Number(currencyData[key].value || 0) + Number(lootCurrency[key] || 0);
+              	currencyData[key] = { "value": amount.toString() };
        	 	}
+                //console.log(currencyData);
         	await token.update({ "actorData.data.currency": currencyData });
-	  }
+	  
     }
  
-    async addItemsToTokens(stackSame = true) {
+    async addItemsToToken(token, stackSame = true) {
         let items = [];
-	for ( let token of canvas.tokens.controlled ) {
-        	for (const item of this.betterResults) {
-                    //Create the item making sure to pass the token actor and not the base actor
-            		const newItem = await this._createLootItem(item, token.actor, stackSame);
-            		items.push(newItem);
-        	}
-	}
+        for (const item of this.betterResults) {
+              //Create the item making sure to pass the token actor and not the base actor
+              const newItem = await this._createLootItem(item, token.actor, stackSame);
+              items.push(newItem);
+        }
+	
         return items;
     }
 
