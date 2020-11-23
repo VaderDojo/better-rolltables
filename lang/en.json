@@ -7,7 +7,7 @@
     "BRT.CurrencyLoot": "Currency Loot",
     "BRT.Currency": "Currency:",
     "BRT.CurrencyLootPlaceholder": "Add comma separated formulas e.g.: 1d4[gp], (1d4+1)*10[sp]",
-    "BRT.LootActorName": "Add Loot to Actor",
+    "BRT.LootActorName": "This will add loot directly to tokens or groups of tokens",
     "BRT.LootActorNamePlaceholder": "If empty it will create a new loot actor every time",
     "BRT.GenerateLoot.Button": " Generate Loot",
     "BRT.Settings.LootSheet.Title": "Sheet to use for Generated Loot",
