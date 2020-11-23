@@ -53,6 +53,59 @@ export class LootCreator {
     }
 
     /**
+    Token methods added VaderDoJo
+    */
+    async addCurrenciesToTokens() {
+
+	//needed for base key set in the event that a token has no currency properties
+	let currencyDataInitial = {
+		cp: {value: "0"},
+		ep: {value: "0"},
+		gp: {value: "0"},
+		pp: {value: "0"},
+		sp: {value: "0"}
+	}
+
+
+
+	for ( let token of canvas.tokens.controlled ) {
+		console.log(token.data.actorData.data.currency);
+		let currencyData = undefined;
+		if (token.data.actorData.data.currency == undefined) {
+			currencyData = currencyDataInitial;
+			//console.log("Currency was undefined!");
+			//console.log("Now currencyData is:");
+			//console.log(currencyData);
+		} else { 			
+			//console.log(token.data.actorData.data.currency.toString())
+	        currencyData = duplicate(token.data.actorData.data.currency);
+		}
+		
+        const lootCurrency = this.currencyData;
+		
+		for (var key in currencyDataInitial) {
+              const amount = Number(currencyData[key].value || 0) + Number(lootCurrency[key] || 0);
+              currencyData[key] = { "value": amount.toString() };
+       	 	}
+        	await token.update({ "actorData.data.currency": currencyData });
+	  }
+    }
+ 
+    async addItemsToTokens(stackSame = true) {
+        let items = [];
+	for ( let token of canvas.tokens.controlled ) {
+        	for (const item of this.betterResults) {
+                    //Create the item making sure to pass the token actor and not the base actor
+            		const newItem = await this._createLootItem(item, token.actor, stackSame);
+            		items.push(newItem);
+        	}
+	}
+        return items;
+    }
+
+
+    
+    /**
      * 
      * @param {object} item rapresentation 
      * @param {Actor} actor to which to add items to
